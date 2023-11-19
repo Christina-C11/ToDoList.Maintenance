@@ -60,5 +60,31 @@ namespace ToDoList.Maintenance.API.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody] ToDoItem toDoItem)
+        {
+            try
+            {
+                return Ok(await _maintenanceService.Update(toDoItem));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] ToDoItem toDoItem)
+        {
+            try
+            {
+                return Ok(await _maintenanceService.Delete(toDoItem));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

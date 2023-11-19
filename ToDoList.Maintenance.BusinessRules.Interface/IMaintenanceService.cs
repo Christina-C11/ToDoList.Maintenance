@@ -6,6 +6,8 @@ namespace ToDoList.Maintenance.BusinessRules.Interface
     {
         public Task<List<ToDoItem>> GetAll();
         public Task<ToDoItem> GetById(Int64 id);
-        public Task<string> Add(ToDoItem item);
+        public Task<List<ToDoItem>> Add(ToDoItem item);
+        public Task<List<ToDoItem>> Update(ToDoItem item);
+        public Task<List<ToDoItem>> Delete(ToDoItem item);
     }
 }

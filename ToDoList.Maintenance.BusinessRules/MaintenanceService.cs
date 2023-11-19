@@ -30,7 +30,7 @@ namespace ToDoList.Maintenance.BusinessRules
             }
             catch(Exception ex)
             {
-                log.Error(JsonSerializer.Serialize(ex));
+                log.Error(ex);
                 throw;
             }
         }
@@ -49,27 +49,86 @@ namespace ToDoList.Maintenance.BusinessRules
             }
             catch(Exception ex)
             {
-                log.Error(JsonSerializer.Serialize(ex));
+                log.Error(ex);
                 throw;
             }  
         }
 
-        public async Task<string> Add(ToDoItem toDoItem)
+        public async Task<List<ToDoItem>> Add(ToDoItem toDoItem)
         {
             try
             {
                 //Convert toDoItem from ToDoItem to ToDoItemDB object
                 var toDoItemDB = toDoItem.ConvertToDbModel(toDoItem);
+                
+                //Add item
                 _context.ToDoItem.Add(toDoItemDB);
                 //Save and commit changes into table
                 var result = await _context.SaveChangesAsync();
 
-                //If there is result return Successful; else return Failed;
-                return (result > 0) ? "Successful" : "Failed";
+                //If there is result return list of ToDoItem; else return empty list;
+                return (result > 0) ? await GetAll() : new List<ToDoItem>();
             }
             catch (Exception ex)
             {
-                log.Error(JsonSerializer.Serialize(ex));
+                log.Error(ex);
+                throw;
+            }
+        }
+
+        public async Task<List<ToDoItem>> Update(ToDoItem toDoItem)
+        {
+            try
+            {
+                var existingItem = await _context.ToDoItem.FirstOrDefaultAsync(i => i.Id == toDoItem.Id);
+
+                //If does not have existing item
+                if (existingItem == null) return new List<ToDoItem>();
+
+                //Update properties
+                existingItem.Title = toDoItem.Title;
+                existingItem.Priority = toDoItem.Priority;
+                existingItem.Items = JsonSerializer.Serialize<List<ItemDetail>>(toDoItem.ItemList);
+                existingItem.DueDate = toDoItem.DueDate;
+                existingItem.Status = toDoItem.Status;
+                existingItem.LastUpdatedBy = toDoItem.LastUpdatedBy;
+                existingItem.LastUpdatedDate = toDoItem.LastUpdatedDate;
+
+                //Update item
+                _context.ToDoItem.Update(existingItem);
+                //Save and commit changes into table
+                var result = await _context.SaveChangesAsync();
+
+                //If there is result return list of ToDoItem; else return empty list;
+                return (result > 0) ? await GetAll() : new List<ToDoItem>();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                throw;
+            }
+        }
+
+        public async Task<List<ToDoItem>> Delete(ToDoItem toDoItem)
+        {
+            try
+            {
+                var itemToDelete = await _context.ToDoItem.FindAsync(toDoItem.Id);
+
+                //If does not have item to delete
+                if (itemToDelete == null) return new List<ToDoItem>();
+
+                //Delete item
+                _context.ToDoItem.Remove(itemToDelete);
+                //Save and commit changes into table
+                var result = await _context.SaveChangesAsync();
+
+                //If there is result return list of ToDoItem; else return empty list;
+                return (result > 0) ? await GetAll() : new List<ToDoItem>();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
                 throw;
             }
         }
