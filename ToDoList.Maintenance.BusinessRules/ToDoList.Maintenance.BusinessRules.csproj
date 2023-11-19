@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ToDoList.Maintenance.BusinessRules.Interface\ToDoList.Maintenance.BusinessRules.Interface.csproj" />
+    <ProjectReference Include="..\ToDoList.Maintenance.DataAccess\ToDoList.Maintenance.DataAccess.csproj" />
     <ProjectReference Include="..\ToDoList.Maintenance.Models\ToDoList.Maintenance.Models.csproj" />
   </ItemGroup>
 

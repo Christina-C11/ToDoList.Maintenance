@@ -4,6 +4,8 @@ namespace ToDoList.Maintenance.BusinessRules.Interface
 {
     public interface IMaintenanceService
     {
-        public List<ToDoItem> Get();
+        public Task<List<ToDoItem>> GetAll();
+        public Task<ToDoItem> GetById(Int64 id);
+        public Task<string> Add(ToDoItem item);
     }
 }

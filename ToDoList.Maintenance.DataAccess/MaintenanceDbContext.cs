@@ -9,6 +9,7 @@ namespace ToDoList.Maintenance.DataAccess
             : base(options)
         { }
 
-        public DbSet<ToDoItem> ToDoItem { get; set; }
+        public DbSet<ToDoItemDB> ToDoItem { get; set; }
+
     }
 }

@@ -1,6 +1,7 @@
-using ToDoList.Maintenance.BusinessRules.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ToDoList.Maintenance.BusinessRules.Interface;
+using ToDoList.Maintenance.Models;
 
 namespace ToDoList.Maintenance.API.Controllers
 {
@@ -20,14 +21,41 @@ namespace ToDoList.Maintenance.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(_maintenanceService.Get());
+                return Ok(await _maintenanceService.GetAll());
                     
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetById(Int64 id)
+        {
+            try
+            {
+                return Ok(await _maintenanceService.GetById(id));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody]ToDoItem toDoItem)
+        {
+            try
+            {
+                return Ok(await _maintenanceService.Add(toDoItem));
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }
