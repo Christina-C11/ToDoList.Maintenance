@@ -1,10 +1,14 @@
+using Microsoft.EntityFrameworkCore;
 using ToDoList.Maintenance.API.Controllers;
 using ToDoList.Maintenance.BusinessRules;
 using ToDoList.Maintenance.BusinessRules.Interface;
+using ToDoList.Maintenance.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<MaintenanceDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(MaintenanceController).Assembly)

@@ -24,7 +24,7 @@ namespace ToDoList.Maintenance.Models
         [DataMember]
         public string LastUpdatedBy { get; set; }
         [DataMember]
-        public DateTime LastUpdatedate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
     }
 }
