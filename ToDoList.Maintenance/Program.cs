@@ -1,8 +1,14 @@
+using log4net.Config;
+using log4net;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using ToDoList.Maintenance.API.Controllers;
 using ToDoList.Maintenance.BusinessRules;
 using ToDoList.Maintenance.BusinessRules.Interface;
 using ToDoList.Maintenance.DataAccess;
+
+var loggerRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+XmlConfigurator.Configure(loggerRepository, new FileInfo("log4net.config"));
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +25,7 @@ builder.Services.AddScoped<IMaintenanceService,MaintenanceService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

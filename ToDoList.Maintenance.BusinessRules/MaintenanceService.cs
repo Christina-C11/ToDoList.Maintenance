@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using log4net;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using ToDoList.Maintenance.BusinessRules.Interface;
 using ToDoList.Maintenance.DataAccess;
 using ToDoList.Maintenance.Models;
@@ -8,6 +10,7 @@ namespace ToDoList.Maintenance.BusinessRules
     public class MaintenanceService : IMaintenanceService
     {
         private readonly MaintenanceDbContext _context;
+        private static readonly ILog log = LogManager.GetLogger(typeof(MaintenanceService));
 
         public MaintenanceService(MaintenanceDbContext context)
         {
@@ -16,30 +19,58 @@ namespace ToDoList.Maintenance.BusinessRules
 
         public async Task<List<ToDoItem>> GetAll()
         {
-            var toDoItems = await _context.ToDoItem.ToListAsync();
-            return toDoItems.Select(item => item.ConvertToModel(item)).ToList(); 
+            try
+            {
+                //To get list form ToDoItem table
+                var toDoItems = await _context.ToDoItem.ToListAsync();
+
+                //To select every ToDoItemDB item from toDoItems and convert it to ToDoItem
+                //Return List of ToDoItem
+                return toDoItems.Select(item => item.ConvertToModel(item)).ToList();
+            }
+            catch(Exception ex)
+            {
+                log.Error(JsonSerializer.Serialize(ex));
+                throw;
+            }
         }
 
         public async Task<ToDoItem> GetById(Int64 id)
         {
-            var toDoItemDb = (await _context.ToDoItem.ToListAsync()).FirstOrDefault(item => item.Id == id);
-            var toDoItem = toDoItemDb.ConvertToModel(toDoItemDb);
-            return toDoItem;
+            try
+            {
+                //To get list from ToDoItem table
+                //To get the first matched ID result by searching id
+                var toDoItemDb = (await _context.ToDoItem.ToListAsync()).FirstOrDefault(item => item.Id == id);
+
+                //Convert toDoItemDb from ToDoItemDB to ToDoItem object
+                var toDoItem = toDoItemDb.ConvertToModel(toDoItemDb);
+                return toDoItem;
+            }
+            catch(Exception ex)
+            {
+                log.Error(JsonSerializer.Serialize(ex));
+                throw;
+            }  
         }
 
         public async Task<string> Add(ToDoItem toDoItem)
         {
-            var toDoItemDB = toDoItem.ConvertToDbModel(toDoItem);
-            _context.ToDoItem.Add(toDoItemDB);
-            var result = await _context.SaveChangesAsync();
+            try
+            {
+                //Convert toDoItem from ToDoItem to ToDoItemDB object
+                var toDoItemDB = toDoItem.ConvertToDbModel(toDoItem);
+                _context.ToDoItem.Add(toDoItemDB);
+                //Save and commit changes into table
+                var result = await _context.SaveChangesAsync();
 
-            if(result > 0)
-            {
-                return "Successful";
+                //If there is result return Successful; else return Failed;
+                return (result > 0) ? "Successful" : "Failed";
             }
-            else
+            catch (Exception ex)
             {
-                return "Failed";
+                log.Error(JsonSerializer.Serialize(ex));
+                throw;
             }
         }
     }

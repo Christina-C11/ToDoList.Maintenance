@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -16,6 +17,12 @@
     <ProjectReference Include="..\ToDoList.Maintenance.BusinessRules\ToDoList.Maintenance.BusinessRules.csproj" />
     <ProjectReference Include="..\ToDoList.Maintenance.DataAccess\ToDoList.Maintenance.DataAccess.csproj" />
     <ProjectReference Include="..\ToDoList.Maintenance.Models\ToDoList.Maintenance.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
