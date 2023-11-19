@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoList.Maintenance.BusinessRules.Interface\ToDoList.Maintenance.BusinessRules.Interface.csproj" />
+    <ProjectReference Include="..\ToDoList.Maintenance.Models\ToDoList.Maintenance.Models.csproj" />
+  </ItemGroup>
+
+</Project>

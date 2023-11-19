@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoList.Maintenance.API\ToDoList.Maintenance.API.csproj" />
+    <ProjectReference Include="..\ToDoList.Maintenance.BusinessRules\ToDoList.Maintenance.BusinessRules.csproj" />
+    <ProjectReference Include="..\ToDoList.Maintenance.DataAccess\ToDoList.Maintenance.DataAccess.csproj" />
+    <ProjectReference Include="..\ToDoList.Maintenance.Models\ToDoList.Maintenance.Models.csproj" />
+  </ItemGroup>
+
+</Project>
