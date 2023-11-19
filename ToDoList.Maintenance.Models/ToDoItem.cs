@@ -6,13 +6,15 @@ namespace ToDoList.Maintenance.Models
     public class ToDoItem
     {
         [DataMember]
-        public int Id { get; set; }
+        public Int64 Id { get; set; }
         [DataMember]
         public string Title { get; set; }
         [DataMember]
         public string Items { get; set; }
         [DataMember]
         public int Priority { get; set; }
+        [DataMember]
+        public DateTime DueDate { get; set; }
         [DataMember]
         public int Status { get; set; }
         [DataMember]
