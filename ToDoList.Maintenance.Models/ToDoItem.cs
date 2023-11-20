@@ -18,7 +18,7 @@ namespace ToDoList.Maintenance.Models
 
     public class ToDoItem : ToDoItemBase
     {
-        public List<ItemDetail> ItemList { get; set; } = new List<ItemDetail>();
+        public List<ItemDetail>? ItemList { get; set; } = new List<ItemDetail>();
         public ToDoItemDB ConvertToDbModel(ToDoItem item)
         {
             return new ToDoItemDB
@@ -26,7 +26,7 @@ namespace ToDoList.Maintenance.Models
                 Id = this.Id,
                 Title = this.Title,
                 Priority = this.Priority,
-                Items = JsonSerializer.Serialize<List<ItemDetail>>(item.ItemList),
+                Items = JsonSerializer.Serialize<List<ItemDetail>>(item.ItemList) ?? "",
                 DueDate = this.DueDate,
                 Status = this.Status,
                 CreatedBy = this.CreatedBy,

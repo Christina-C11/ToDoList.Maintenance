@@ -6,7 +6,8 @@
         {
             Active = 0,
             Inactive = 1,
-            Expired = 2
+            IsCompleted = 2,
+            Expired = 3
         }
     }
 }
