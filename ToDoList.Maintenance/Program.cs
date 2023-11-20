@@ -12,6 +12,19 @@ XmlConfigurator.Configure(loggerRepository, new FileInfo("log4net.config"));
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Read allowed origins from appsettings.json
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins(allowedOrigins)
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddDbContext<MaintenanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -28,8 +41,11 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+app.UseHttpsRedirection();
 
 // Configure the HTTP request pipeline.
+app.UseCors("MyCorsPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -38,8 +54,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
     });
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
