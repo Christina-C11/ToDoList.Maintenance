@@ -17,16 +17,17 @@ namespace ToDoList.Maintenance.BusinessRules
             _context = context;
         }
 
-        public async Task<List<ToDoItem>> GetAll()
+        public async Task<List<ToDoItem>> GetAll(GetToDoItem toDoItem)
         {
             try
             {
                 //To get list form ToDoItem table
                 var toDoItems = await _context.ToDoItem.ToListAsync();
-
+                var recordsPerPage = toDoItem.RecordPerPage;
                 //To select every ToDoItemDB item from toDoItems and convert it to ToDoItem
                 //Return List of ToDoItem
-                return toDoItems.Select(item => item.ConvertToModel(item)).ToList();
+                return toDoItems.Select(item => item.ConvertToModel(item)).OrderBy(x => x.DueDate)
+                    .Take(toDoItem.RecordPerPage).ToList();
             }
             catch(Exception ex)
             {
@@ -67,7 +68,7 @@ namespace ToDoList.Maintenance.BusinessRules
                 var result = await _context.SaveChangesAsync();
 
                 //If there is result return list of ToDoItem; else return empty list;
-                return (result > 0) ? await GetAll() : new List<ToDoItem>();
+                return (result > 0) ? await GetAll(toDoItem.GetToDoItem) : new List<ToDoItem>();
             }
             catch (Exception ex)
             {
@@ -100,7 +101,7 @@ namespace ToDoList.Maintenance.BusinessRules
                 var result = await _context.SaveChangesAsync();
 
                 //If there is result return list of ToDoItem; else return empty list;
-                return (result > 0) ? await GetAll() : new List<ToDoItem>();
+                return (result > 0) ? await GetAll(toDoItem.GetToDoItem) : new List<ToDoItem>();
             }
             catch (Exception ex)
             {
@@ -124,7 +125,7 @@ namespace ToDoList.Maintenance.BusinessRules
                 var result = await _context.SaveChangesAsync();
 
                 //If there is result return list of ToDoItem; else return empty list;
-                return (result > 0) ? await GetAll() : new List<ToDoItem>();
+                return (result > 0) ? await GetAll(toDoItem.GetToDoItem) : new List<ToDoItem>();
             }
             catch (Exception ex)
             {

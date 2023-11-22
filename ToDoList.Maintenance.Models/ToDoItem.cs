@@ -19,6 +19,7 @@ namespace ToDoList.Maintenance.Models
     public class ToDoItem : ToDoItemBase
     {
         public List<ItemDetail>? ItemList { get; set; } = new List<ItemDetail>();
+        public GetToDoItem GetToDoItem { get; set; }
         public ToDoItemDB ConvertToDbModel(ToDoItem item)
         {
             return new ToDoItemDB
@@ -56,5 +57,13 @@ namespace ToDoList.Maintenance.Models
                 LastUpdatedDate = this.LastUpdatedDate
             };
         }
+    }
+
+    public class GetToDoItem
+    {
+        public int PageIndex { get; set; }
+        public int? TotalPageCount { get; set; }
+        public int RecordPerPage { get; set; }
+        public List<ToDoItem>? ToDoItems { get; set; } = new List<ToDoItem>();
     }
 }

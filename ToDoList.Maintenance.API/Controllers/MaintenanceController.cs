@@ -20,12 +20,12 @@ namespace ToDoList.Maintenance.API.Controllers
             _maintenanceService = maintenanceService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpPost]
+        public async Task<IActionResult> GetAll([FromBody]GetToDoItem toDoItem)
         {
             try
             {
-                return Ok(await _maintenanceService.GetAll());
+                return Ok(await _maintenanceService.GetAll(toDoItem));
                     
             }
             catch(Exception ex)
