@@ -27,7 +27,7 @@ namespace ToDoList.Maintenance.Models
                 Id = this.Id,
                 Title = this.Title,
                 Priority = this.Priority,
-                Items = JsonSerializer.Serialize<List<ItemDetail>>(item.ItemList) ?? "",
+                Items = JsonSerializer.Serialize<List<ItemDetail>>(item.ItemList) ?? string.Empty,
                 DueDate = this.DueDate,
                 Status = this.Status,
                 CreatedBy = this.CreatedBy,
@@ -65,5 +65,6 @@ namespace ToDoList.Maintenance.Models
         public int? TotalPageCount { get; set; }
         public int RecordPerPage { get; set; }
         public List<ToDoItem>? ToDoItems { get; set; } = new List<ToDoItem>();
+        public string? SearchText { get; set; } = string.Empty;
     }
 }

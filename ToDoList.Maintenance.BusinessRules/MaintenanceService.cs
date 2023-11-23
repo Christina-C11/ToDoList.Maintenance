@@ -1,9 +1,10 @@
-﻿using log4net;
+﻿using System.Text.Json;
+using log4net;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using ToDoList.Maintenance.BusinessRules.Interface;
 using ToDoList.Maintenance.DataAccess;
 using ToDoList.Maintenance.Models;
+using static ToDoList.Maintenance.Models.ItemEnum;
 
 namespace ToDoList.Maintenance.BusinessRules
 {
@@ -22,12 +23,25 @@ namespace ToDoList.Maintenance.BusinessRules
             try
             {
                 //To get list form ToDoItem table
-                var toDoItems = await _context.ToDoItem.ToListAsync();
+                var toDoItemsDB = await _context.ToDoItem.ToListAsync();
                 var recordsPerPage = toDoItem.RecordPerPage;
+                var toDoItems = toDoItemsDB.Select(item => item.ConvertToModel(item));
                 //To select every ToDoItemDB item from toDoItems and convert it to ToDoItem
                 //Return List of ToDoItem
-                return toDoItems.Select(item => item.ConvertToModel(item)).OrderBy(x => x.DueDate)
-                    .Take(toDoItem.RecordPerPage).ToList();
+
+                if(toDoItems.Count() > 0) {
+                    if (!string.IsNullOrEmpty(toDoItem.SearchText))
+                    {
+                        var searchText = toDoItem.SearchText.ToLower();
+
+                        toDoItems = toDoItems.Where(item => item.Title.ToLower().Contains(searchText)
+                        || item.DueDate.ToString("dd-MM-yyyy").Contains(searchText)
+                        || ((Priority)item.Priority).ToString().ToLower().Contains(searchText)
+                        || ((Status)item.Status).ToString().ToLower().Contains(searchText)
+                        );
+                    }
+                }
+                return toDoItems.OrderBy(x => x.DueDate).Take(toDoItem.RecordPerPage).ToList();
             }
             catch(Exception ex)
             {
